@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    .container
+        .row
+            #panell.col.s6.offset-s3.z-depth-1(style='margin-top: 70px;padding: 0px;')
+                h5#title(style='background-color: #009688;color: white;padding: 8px;margin-top: 0px') Login Form
+                form(method='post', action="/users/login", style='padding:0px;border-radius: 3px;box-sizing: border-box;')
+                    input(type='hidden', name='_csrf', value=_csrf)
+                    | {{ form }}
+                    button.btn.waves-effect.waves-light(type='submit', style='float: right;margin-bottom: 10px;margin-right: 10px;')
+                        | Login
+                        i.material-icons.right send
+                br

@@ -3,7 +3,7 @@ var User = require('../models/user');
 // GET /login.
 // Login Page
 exports.getLogin  = function(req, res) {
-    res.send('NOT IMPLEMENTED: Login GET');
+    res.render('login', { title: 'Login' });
 };
 
 
@@ -24,7 +24,7 @@ exports.getLogout  = function(req, res) {
 // GET /signup.
 // Signup Page
 exports.getSignup  = function(req, res) {
-    res.send('NOT IMPLEMENTED: Signup GET');
+    res.render('signup', { title: 'Signup' });
 };
 
 
