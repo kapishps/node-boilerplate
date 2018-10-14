@@ -1,7 +1,32 @@
 doctype html
-html
+html(lang='en')
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css')
+    style(media='screen', type='text/css').
+      body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+
+      main {
+        flex: 1 0 auto;
+      }
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js')
+    script(type='text/javascript').
+        jQuery(document).ready(function ($) {
+            $('select').material_select();
+            $(".dropdown-button").dropdown();
+        });
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(charset='UTF-8')
+    title Kapish
   body
-    block content
+    include header
+    main
+      br
+    footer.page-footer.teal(style='!important;padding-top: 0;')
+      .footer-copyright
+        .container © 2018 Copyright Kapish
