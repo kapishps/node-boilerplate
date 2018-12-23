@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/login', user_controller.getLogin);
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }),
+router.post('/login', passport.authenticate('local', { failureRedirect: '/users/login' }),
     user_controller.postLogin);
 
 router.get('/logout', user_controller.getLogout);

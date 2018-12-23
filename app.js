@@ -13,17 +13,30 @@ const LocalStrategy = require('passport-local').Strategy;
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var User = require('./models/user');
+
 // configure passport.js to use the local strategy
 passport.use(new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password'
     },
     function(username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
-            if (err) { return done(err);}
-            if (!user) { return done(null, false, { message: 'Incorrect username.' });}
-            if (!user.validPassword(password)) { return done(null, false, { message: 'Incorrect password.' });}
-            return done(null, user);
+        // console.log(username);
+        // console.log(password);
+        User.findOne({ email: username }, function(err, user) {
+            if (err) { console.log("1");return done(err);}
+            if (!user) {
+                console.log("Incorrect username.");
+                return done(null, false, { message: 'Incorrect username.' });
+            }
+            user.comparePassword(password, function(err,isMatch) {
+                if(!isMatch){
+                    console.log(err);
+                    console.log("Incorrect Password.");
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+                return done(null, user);
+            });
         });
     }
 ));
@@ -40,14 +53,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    next(createError(404));
-});
-
 app.use(session({
     resave: false,
     saveUninitialized: true,
@@ -58,11 +63,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    next(createError(404));
+});
+
+
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
+    console.log("id");
     User.findById(id, function(err, user) {
         done(err, user);
     });
@@ -80,7 +95,7 @@ app.use(function(err, req, res, next) {
 });
 
 //Set up mongoose connection
-mongoose.connect(process.env.DB_URL);
+mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
